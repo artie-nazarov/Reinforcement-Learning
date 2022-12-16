@@ -43,10 +43,10 @@ class Bandit:
     Simulate K-Bandit for n timeteps
     exploration_prob - probability of taking a random action at each timestep (default: 1/greedy aproach)
     '''
-    def simulation(self, n=100, exploration_prob=1):
+    def simulation(self, n=100, exploration_prob=0):
         for i in range(n):
             # Exploration Step
-            if np.random.uniform() > exploration_prob:
+            if np.random.uniform() > 1-exploration_prob:
                 a = np.random.choice(np.arange(self.k))
             # Exploitation Step
             else: 
@@ -57,7 +57,7 @@ class Bandit:
             Q = self.k_rewards[a]
             N = self.k_steps[a]
             # Action-value method (incremental)
-            self.k_rewards += (1/N) * (R - Q)
+            self.k_rewards[a] += (1/N) * (R - Q)
             self.reward_at_step.append(R)
             self.actions_taken[a] += 1
             # Check if an optimal value has been chosen
